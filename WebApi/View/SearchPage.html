@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <script src="../../Scripts/FlightDtes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <title> Search Page </title>
+</head>
+<body style="background-image:url(https://www.flyopedia.com/wp-content/themes/flyopedia/assets/images/flight-bg.jpg);background-repeat:no-repeat; background-position:center; background-attachment:fixed; background-size:cover">
+
+    <form id="myForm">
+        <div>
+            <select class="btn btn-primary" id="options">
+                <option value="airline">Airline Company Name</option>
+                <option value="destination">Destination Country Name</option>
+                <option value="origin">Original Country Name</option>
+                <option value="flight">Flight Number</option>
+            </select>
+            <input type="text" id="txtBox" />
+            <button type="button" class="btn btn-success" onclick="onSearchClick()">Search</button>
+            <a href="getArrivals" class="btn btn-primary ">Arrivals</a>
+            <a href="getFlights" class="btn btn-primary">Departures</a>
+            <input type="reset" onclick="onResetClick()" value="Reset the form">
+        </div>
+    </form>
+    <table border="1" id="flightsTable" style="font-family:'Berlin Sans FB';margin-top:10px;" class="table table-striped table-bordered">
+
+    </table>
+    <script type="text/javascript">
+        const flightInfo =
+        {
+            FlightNumber: 0,
+            AirlineName: "",
+            DestCountry: "",
+            OriginCountry: "",
+            FlightType: ""
+        };
+
+        function onResetClick() {
+            $("#txtBox").trigger("reset");
+            //$('#txtBox').val('')
+        }
+
+        function onSearchClick() {
+            const selected = $("#options").val();
+            const tb = $("#txtBox").val();
+            switch (selected) {
+                case "flight":
+                    {
+                        flightInfo.FlightNumber = tb;
+                        break;
+                    }
+
+                case "airline": 
+                    {
+                        flightInfo.AirlineName = tb;
+                        break;
+                    }
+                case "destination":
+                    {
+                        flightInfo.DestCountry = tb;
+                        break;
+                    }
+                case "origin":
+                    {
+                        flightInfo.OriginCountry = tb;
+                        break;
+                    }
+            }
+
+            //$(document).ready(() => {
+                $.ajax({
+                    
+                    url: "/api/AnonymousFacade/Search?airline=" + flightInfo.AirlineName + "&destination= " + flightInfo.DestCountry + "&origin= " + flightInfo.OriginCountry +"&flight="+ flightInfo.FlightNumber,
+                    type: 'GET',
+                    contentType: 'application/json',
+                }).then((result) => {
+                    console.log(result);
+                    flightInfo.DestCountry = '';
+                    flightInfo.OriginCountry = '';
+                    flightInfo.AirlineName = '';
+                    flightInfo.FlightNumber = 0;
+                    
+                    $("#flightsTable").append('<tr class="table-danger" style = "font-size:18px">' +
+                        "<th>Flight Number</th>" +
+                        "<th>Origin Flight Location</th>" +
+                        "<th>Destination Flight Location</th>" +
+                        "<th>Departure Time</th>" +
+                        "<th>Landing time</th>" +
+                        "<th>Remaining Tickets</th>" +
+                        "</tr>");
+                    if (result=='' ) {
+                        swal.fire({
+                            icon: 'warning',
+                            title: 'Something went wrong, please try again',
+                            timer: 2000
+                        });
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
+                        
+                    }
+
+                    $("#flightsTable").find("tr:gt(0)").remove();
+                    $.each(result, function (index, value) {
+                        $("#flightsTable").append('<tr style="color:black;font-size:14px">' +
+                            "<td>" + result[index].flightNum + "</td>" +
+                            "<td>" + result[index].originFlightLocation + "</td>" +
+                            "<td>" + result[index].destFlightLocation + "</td>" +
+                            "<td>" + result[index].departureTime + "</td>" +
+                            "<td>" + result[index].landingTime + "</td>" +
+                            "<td style = 'font-size:20px;margin-left:10px'>" + result[index].tickets + "</td>")
+                    }), function () {
+                        console.log("Exception has catched")
+                    }
+                });
+            //})
+        }
+    </script>
+
+</body>
+</html>

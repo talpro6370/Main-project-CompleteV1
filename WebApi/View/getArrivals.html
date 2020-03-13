@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <script src="../../Scripts/flight.js"></script>
+    <script src="../../Scripts/AutoRefresh.js"></script>
+    <script src="../../Scripts/ArrivalsDets.js"></script>
+    <title>Arrivals Page</title>
+</head>
+<body style="background-image:url(https://www.flyopedia.com/wp-content/themes/flyopedia/assets/images/flight-bg.jpg);background-repeat:no-repeat; background-position:center; background-attachment:fixed; background-size:cover">
+    <nav class="navbar navbar-light bg-info">
+        <form class="form-inline">
+            <a class="navbar-brand" href="homepage1">RdtFlights</a>
+            <div class="navbar-static-top" id="nav-bar-top">
+                <ul class="nav navbar-nav navbar-static-top">
+                    <li><a href="getArrivals">Arrivals</a></li>
+                    <li><a href="getFlights">Departures</a></li>
+                    <li><a href="SearchPage">Search</a></li>
+                </ul>
+            </div>
+        </form>
+    </nav>
+    <table border="1" id="flightsTable" style="margin-left: 10px" class="table table-striped table-bordered">
+        <tr>
+            <th>#</th>
+            <th>flight Name</th>
+            <th>Coming from </th>
+            <th>To</th>
+            <th>Estimated Time</th>
+            <th>Tickets</th>
+            <th>Status</th>
+        </tr>
+
+    </table>
+    <script>
+
+        const flights = []
+
+        $(document).ready(() => {
+            $tableFlights = $("#flightsTable")
+            $.ajax({
+                url: "/api/AnonymousFacade/GetArrivalsDetails"
+            })
+                .then((flightsWebapi) => {
+
+                    $.each(flightsWebapi, (i, oneFlight) => {
+
+                        const aArrivalDets = new ArrivalsDets(oneFlight.flightName, oneFlight.originFlightLocation, oneFlight.destFlightLocation, oneFlight.estimatedTime, oneFlight.tickets,oneFlight.status
+                        )
+                        $tableFlights.append("<tr>" +
+                            "<td>" + i + "</td>" +
+                            "<td>" + oneFlight.flightName + "</td>" +
+                            "<td>" + oneFlight.originFlightLocation + "</td>" +
+                            "<td>" + oneFlight.destFlightLocation + "</td>" +
+                            "<td>" + oneFlight.estimatedTime + "</td>" +
+                            "<td>" + oneFlight.tickets + "</td>") +
+                            "<td>" + oneFlight.status + "</td>"  
+                    })
+                })
+                .catch((err) => { console.log(err) })
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html ng-app="myFlightApp">
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <link href="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js" />
+    <script type="text/javascript" src="../../Scripts/angular.min.js"></script>
+    <script src="../../Scripts/BootstrapLoginCustomer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="../../Scripts/sweetalert2.all.min.js"></script>
+
+    <title>Login Page</title>
+</head>
+<body style="background-image:url(https://c-parity.com/wp-content/uploads/2016/07/background.jpg);background-repeat:no-repeat; background-position:center; background-attachment:fixed; background-size:cover">
+    <div class="container main-content" ng-controller="LoginCustCtrl" style="height:400px; width:400px;border-radius:30px; text-align:center;">
+        <h1 style="text-align:center; padding-top:20px; color:#1fe9f7; font-weight:bolder;text-shadow:40px; font-stretch:narrower; text-decoration:underline;text-wrap:normal;font-display:block">Login</h1>
+        <form ng-submit="onSubmit(theForm.$valid)" name="theForm">
+            <div class="form-group">
+                <label for="USER_NAME">User Name</label>
+                <input type="text" class="form-control" ng-model="USER_NAME" id="USER_NAME" style="border-radius:15px;" />
+            </div>
+            <div class="form-group">
+                <label for="PASSWORD">Password</label>
+                <input type="password" class="form-control" ng-model="PASSWORD" id="PASSWORD" style="border-radius:15px;" />
+            </div>
+            <div class="form-group">
+                <button id="loginBtn" type="submit" class="btn btn-primary" ng-click="postData(USER_NAME,PASSWORD)"
+                        style="width:100px;height:50px; background-color:greenyellow;cursor:pointer;color:darkviolet; font-weight:bold">
+                    Login
+                </button>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
