@@ -1,0 +1,62 @@
+﻿<Window x:Class="part2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:part2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="600" >
+    <Window.Resources>
+        <ControlTemplate x:Key="ErrorTemplate">
+            <DockPanel LastChildFill="True">
+                <Border BorderBrush="Red" BorderThickness="1">
+                    <AdornedElementPlaceholder />
+                </Border>
+            </DockPanel>
+        </ControlTemplate>
+        <Style x:Key="textStyleTextBox" TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+        Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Button x:Name="AddBtn" Content="Add to DB" HorizontalAlignment="Left" Margin="401,81,0,0" VerticalAlignment="Top" Width="75" Height="30" Command="{Binding AddToDB}"/>
+
+        <StackPanel>
+            <Label Content="Airline Companies" HorizontalAlignment="Left" Margin="82,80,0,0" VerticalAlignment="Top"/>
+            <Label Content="Customers" HorizontalAlignment="Left" Margin="82,20,0,0" VerticalAlignment="Top"/>
+            <Label Content="Flights Per Company" HorizontalAlignment="Left" Margin="82,20,0,0" VerticalAlignment="Top"/>
+            <Label Content="Tickets Per Customer" HorizontalAlignment="Left" Margin="82,20,0,0" VerticalAlignment="Top"/>
+            <Label Content="Countries" HorizontalAlignment="Left" Margin="82,20,0,0" VerticalAlignment="Top"/>
+            <TextBox  Height="20" Width="80" Margin="-34,-390,0,0" BorderBrush="Black" BorderThickness="2" x:Name="airlineCmpTxtBox" Text="{Binding AirlineNo,Mode=TwoWay,ValidatesOnDataErrors=True,NotifyOnValidationError=True,ValidatesOnExceptions=True}" TextWrapping="Wrap" TextAlignment="Center" Style="{StaticResource textStyleTextBox}" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+            <TextBox Height="20" Width="80" Margin="-34,-300,0,0" BorderBrush="Black" BorderThickness="2" x:Name="customerTxtBox" Text="{Binding CustomerNo,Mode=TwoWay,ValidatesOnDataErrors=True,NotifyOnValidationError=True,ValidatesOnExceptions=True}"  TextWrapping="Wrap" TextAlignment="Center" Validation.ErrorTemplate="{StaticResource ErrorTemplate}"/>
+            <TextBox Height="20" Width="80" Margin="-34,-210,0,0" BorderBrush="Black" BorderThickness="2" Text="{Binding FlightsPerCmpnyNo,Mode=TwoWay}" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBox Height="20" Width="80" Margin="-34,-120,0,0" BorderBrush="Black" BorderThickness="2" x:Name="ticketsPerCustomer" Text="{Binding TicketsPerCustNo, Mode=TwoWay}" TextWrapping="Wrap" TextAlignment="Center"/>
+            <TextBox Height="20" Width="80" Margin="-34,-30,0,0" BorderBrush="Black" BorderThickness="2" x:Name="CountryTxtBox" Text="{Binding CountriesNo, Mode=TwoWay}" TextWrapping="Wrap" TextAlignment="Center"/>
+           
+            <ProgressBar x:Name="pgBar" Height="20" Width="400" Margin="-30,20,0,0" Value="{Binding dbInsertClass.ProggressBarVal,Mode=TwoWay}" Maximum="100" Minimum="0"/>
+            <Border BorderBrush="Black" BorderThickness="1" Height="200" Width="350" Margin="0,40,32,0">
+                <StackPanel Height="200">
+                    <!--<Label Content="Label" Margin="0,10,0,0"/>
+                    <Label Content="Label" Margin="0,10,0,0"/>
+                    <Label Content="Label" Margin="0,10,0,0"/>
+                    <Label Content="Label" Margin="0,10,0,0"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding dbInsertClass.ProggressBarVal,Mode=TwoWay,NotifyOnSourceUpdated=True}" Margin="0,15,0,0" FontSize="14"/>-->
+
+
+                </StackPanel>
+                
+
+            </Border>
+
+
+        </StackPanel>
+        <Button x:Name="ReplaceBtn" Content="Replace DB" HorizontalAlignment="Left" Margin="400,130,0,0" VerticalAlignment="Top" Width="75" Height="30" Command="{Binding ReplaceDB }"/>
+
+    </Grid>
+</Window>
